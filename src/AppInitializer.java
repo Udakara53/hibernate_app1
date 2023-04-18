@@ -27,10 +27,19 @@ public class AppInitializer {
         Metadata metadata = metadataSources.getMetadataBuilder().build();
         SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
 
-        Session session = sessionFactory.openSession();
-        Object result = session.createNativeQuery("SELECT NOW()").getSingleResult();
-        System.out.println(result);
-        session.close();
-        sessionFactory.close();
+        Session session=null;
+        try{
+            session = sessionFactory.openSession();
+            Object result = session.createNativeQuery("SELECT NOW()").getSingleResult();
+            System.out.println(result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+            sessionFactory.close();
+        }
+
+
+
     }
 }
