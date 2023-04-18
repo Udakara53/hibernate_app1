@@ -1,3 +1,4 @@
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -13,7 +14,7 @@ public class AppInitializer {
         StandardServiceRegistryBuilder standardServiceRegistryBuilder
             =new StandardServiceRegistryBuilder();
         Map<String,String> databaseConfiguration=new HashMap<>();
-        databaseConfiguration.put(Environment.USER,
+        databaseConfiguration.put(Environment.URL,
                 "jdbc:mysql://localhost:3306/asd_1?createDatabaseIfNotExist=true");
         databaseConfiguration.put(Environment.USER,"root");
         databaseConfiguration.put(Environment.PASS,"1234");
@@ -25,5 +26,11 @@ public class AppInitializer {
         MetadataSources metadataSources = new MetadataSources(standardServiceRegistry);
         Metadata metadata = metadataSources.getMetadataBuilder().build();
         SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
+
+        Session session = sessionFactory.openSession();
+        Object result = session.createNativeQuery("SELECT NOW()").getSingleResult();
+        System.out.println(result);
+        session.close();
+        sessionFactory.close();
     }
 }
